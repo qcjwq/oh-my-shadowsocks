@@ -1,0 +1,9 @@
+server:
+  port: 7777
+  connection-timeout: 5000
+
+visitlog.enabled: true
+
+logging:
+  level:
+    com.dragon.shadowsocks: debug
