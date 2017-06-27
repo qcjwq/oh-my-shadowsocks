@@ -148,4 +148,26 @@ public class Profile {
     public void setServer(String server) {
         this.server = server;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Profile profile = (Profile) o;
+
+        if (serverPort != profile.serverPort) return false;
+        if (password != null ? !password.equals(profile.password) : profile.password != null) return false;
+        if (method != null ? !method.equals(profile.method) : profile.method != null) return false;
+        return server != null ? server.equals(profile.server) : profile.server == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = password != null ? password.hashCode() : 0;
+        result = 31 * result + (method != null ? method.hashCode() : 0);
+        result = 31 * result + serverPort;
+        result = 31 * result + (server != null ? server.hashCode() : 0);
+        return result;
+    }
 }

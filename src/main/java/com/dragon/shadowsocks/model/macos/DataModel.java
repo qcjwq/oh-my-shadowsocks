@@ -1,5 +1,9 @@
 package com.dragon.shadowsocks.model.macos;
 
+import com.dragon.shadowsocks.contract.model.ProfileInfo;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -7,7 +11,25 @@ import java.util.List;
  */
 public class DataModel {
     private int current;
-    private List<ProfileModel> profileModels;
+    private List<ProfileModel> profiles;
+
+    public static List<ProfileModel> convert(List<ProfileInfo> profileInfoList) {
+        if (profileInfoList == null || profileInfoList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<ProfileModel> profileModelList = new ArrayList<>();
+        profileInfoList.forEach(a -> {
+            ProfileModel model = new ProfileModel();
+            model.setServer(a.getServer());
+            model.setServer_port(a.getServer_port());
+            model.setPassword(a.getPassword());
+            model.setMethod(a.getMethod());
+            profileModelList.add(model);
+        });
+
+        return profileModelList;
+    }
 
     public int getCurrent() {
         return current;
@@ -17,11 +39,11 @@ public class DataModel {
         this.current = current;
     }
 
-    public List<ProfileModel> getProfileModels() {
-        return profileModels;
+    public List<ProfileModel> getProfiles() {
+        return profiles;
     }
 
-    public void setProfileModels(List<ProfileModel> profileModels) {
-        this.profileModels = profileModels;
+    public void setProfiles(List<ProfileModel> profiles) {
+        this.profiles = profiles;
     }
 }
