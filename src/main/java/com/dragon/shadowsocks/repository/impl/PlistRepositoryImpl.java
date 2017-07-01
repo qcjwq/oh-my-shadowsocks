@@ -1,15 +1,12 @@
 package com.dragon.shadowsocks.repository.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.dd.plist.NSDictionary;
-import com.dd.plist.NSObject;
 import com.dd.plist.PropertyListParser;
 import com.dragon.shadowsocks.common.utils.BizException;
-import com.dragon.shadowsocks.common.utils.Utils;
+import com.dragon.shadowsocks.common.utils.PlistUtil;
 import com.dragon.shadowsocks.model.macos.DataModel;
 import com.dragon.shadowsocks.model.macos.ProfileModel;
 import com.dragon.shadowsocks.repository.PlistRepository;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -18,8 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by cjw on 2017/6/24.
@@ -38,7 +33,7 @@ public class PlistRepositoryImpl implements PlistRepository {
     public NSDictionary getNSDictionary(String plistPath) {
         File file = new File(plistPath);
         if (!file.exists()) {
-            throw new BizException(plistPath + "不存在");
+            return new NSDictionary();
         }
 
         try {
@@ -68,25 +63,7 @@ public class PlistRepositoryImpl implements PlistRepository {
      */
     @Override
     public DataModel getProfileList(NSDictionary rootDict) {
-        if (rootDict == null) {
-            return null;
-        }
-
-        NSObject nsConfig = rootDict.objectForKey("config");
-        String config = nsConfig.toXMLPropertyList();
-        if (StringUtils.isBlank(config)) {
-            return null;
-        }
-
-        Pattern pattern = Pattern.compile("<data>([\\w\\W]*)</data>");
-        Matcher matcher = pattern.matcher(config);
-        if (!matcher.find()) {
-            return null;
-        }
-
-        String data = matcher.group(1).trim();
-        String s = Utils.decodeBase64(data);
-        return JSON.parseObject(s, DataModel.class);
+        return PlistUtil.getProfileList(rootDict);
     }
 
     /**
@@ -115,7 +92,7 @@ public class PlistRepositoryImpl implements PlistRepository {
         }
 
         //更新正在使用的Profile配置值
-        ProfileModel.updateNSDictionary(rootDict, profiles, current);
+        ProfileModel.updateNSDictionary(rootDict, dataModel);
 
         //保存更新后的对象到文件
         saveAsBinary(rootDict, plistPath);

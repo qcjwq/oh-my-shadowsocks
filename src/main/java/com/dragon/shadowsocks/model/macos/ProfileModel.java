@@ -1,9 +1,11 @@
 package com.dragon.shadowsocks.model.macos;
 
+import com.alibaba.fastjson.JSON;
+import com.dd.plist.NSData;
 import com.dd.plist.NSDictionary;
-import com.dd.plist.NSNumber;
 import com.dd.plist.NSObject;
-import com.dragon.shadowsocks.common.utils.Utils;
+import com.dd.plist.NSString;
+import com.dragon.shadowsocks.common.utils.PlistUtil;
 
 import java.util.List;
 
@@ -20,35 +22,31 @@ public class ProfileModel {
     /**
      * 根据Profiles更新rootDictionary
      *
-     * @param rootDict root dict
-     * @param profiles profiles
-     * @param current  current
+     * @param rootDict  root dict
+     * @param dataModel data model
      */
-    public static void updateNSDictionary(NSDictionary rootDict, List<ProfileModel> profiles, int current) {
-        ProfileModel currentProfile = profiles.get(current);
+    public static void updateNSDictionary(NSDictionary rootDict, DataModel dataModel) {
+        ProfileModel currentProfile = dataModel.getProfiles().get(dataModel.getCurrent());
 
-//        //server
-//        NSString server = new NSString(currentProfile.getServer());
-//        putOrReplace(rootDict, ShadowsocksKeyEnum.ProxyIp, server);
-//
-//        //port
-//        NSString port = new NSString(String.valueOf(currentProfile.getServer_port()));
-//        putOrReplace(rootDict, ShadowsocksKeyEnum.ProxyPort, port);
-//
-//        //password
-//        NSString password = new NSString(currentProfile.getPassword());
-//        putOrReplace(rootDict, ShadowsocksKeyEnum.ProxyPassword, password);
-//
-//        //mothod
-//        NSString method = new NSString(currentProfile.getMethod());
-//        putOrReplace(rootDict, ShadowsocksKeyEnum.ProxyEncryption, method);
-//
-//        //config
-//        NSData config = new NSData(JSON.toJSONBytes(profiles));
-//        putOrReplace(rootDict, ShadowsocksKeyEnum.Config, config);
+        //server
+        NSString server = new NSString(currentProfile.getServer());
+        putOrReplace(rootDict, ShadowsocksKeyEnum.ProxyIp, server);
 
-        NSNumber is = new NSNumber(false);
-        putOrReplace(rootDict, ShadowsocksKeyEnum.ShadowsocksIsRunning, is);
+        //port
+        NSString port = new NSString(String.valueOf(currentProfile.getServer_port()));
+        putOrReplace(rootDict, ShadowsocksKeyEnum.ProxyPort, port);
+
+        //password
+        NSString password = new NSString(currentProfile.getPassword());
+        putOrReplace(rootDict, ShadowsocksKeyEnum.ProxyPassword, password);
+
+        //mothod
+        NSString method = new NSString(currentProfile.getMethod());
+        putOrReplace(rootDict, ShadowsocksKeyEnum.ProxyEncryption, method);
+
+        //config
+        NSData config = new NSData(JSON.toJSONBytes(dataModel));
+        putOrReplace(rootDict, ShadowsocksKeyEnum.Config, config);
     }
 
     /**
@@ -57,26 +55,20 @@ public class ProfileModel {
      * @param rootDict root dict
      * @return profile
      */
-    public static ProfileModel getUsingProfileModel(NSDictionary rootDict) {
-        ProfileModel profile = new ProfileModel();
+    private static ProfileModel getUsingProfileModel(NSDictionary rootDict) {
+        DataModel usingDataModel = PlistUtil.getProfileList(rootDict);
+        if (usingDataModel == null) {
+            return null;
+        }
 
-        //server
-        String proxyIp = getNSDcitValue(rootDict, ShadowsocksKeyEnum.ProxyIp);
-        profile.setServer(proxyIp);
+        int current = usingDataModel.getCurrent();
+        List<ProfileModel> profileList = usingDataModel.getProfiles();
 
-        //port
-        String port = getNSDcitValue(rootDict, ShadowsocksKeyEnum.ProxyPort);
-        profile.setServer_port(Utils.toInt(port));
+        if (profileList == null || profileList.isEmpty()) {
+            return null;
+        }
 
-        //password
-        String password = getNSDcitValue(rootDict, ShadowsocksKeyEnum.ProxyPassword);
-        profile.setPassword(password);
-
-        //method
-        String method = getNSDcitValue(rootDict, ShadowsocksKeyEnum.ProxyEncryption);
-        profile.setMethod(method);
-
-        return profile;
+        return profileList.get(current);
     }
 
     /**
