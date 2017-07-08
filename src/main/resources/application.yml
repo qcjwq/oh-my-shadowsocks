@@ -4,6 +4,10 @@ server:
 
 visitlog.enabled: true
 
+schedul:
+  initialDelay: 3
+  period: 180
+
 logging:
   level:
     com.dragon.shadowsocks: debug

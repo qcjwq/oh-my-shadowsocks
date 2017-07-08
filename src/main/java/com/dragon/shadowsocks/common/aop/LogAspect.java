@@ -1,4 +1,4 @@
-package com.dragon.shadowsocks.common.utils;
+package com.dragon.shadowsocks.common.aop;
 
 import com.alibaba.fastjson.JSON;
 import com.dragon.shadowsocks.model.VisitLogModel;

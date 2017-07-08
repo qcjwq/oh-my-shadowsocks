@@ -12,5 +12,4 @@ public interface UnixScriptRepository {
      * @return the int
      */
     int execute(String command);
-
 }

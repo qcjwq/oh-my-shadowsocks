@@ -7,4 +7,14 @@ import com.dragon.shadowsocks.contract.ProfileList;
  */
 public interface ShadowSocksRepository {
     ProfileList.Response getProfileList();
+
+    void importConfig();
+
+    boolean isRunning();
+
+    void kill();
+
+    void start();
+
+    void restart();
 }

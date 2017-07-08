@@ -11,9 +11,9 @@ import java.text.MessageFormat;
 /**
  * Created by cjw on 2017/6/25.
  */
-public class Utils {
+public class CommonUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(Utils.class);
+    private static final Logger logger = LoggerFactory.getLogger(CommonUtil.class);
 
     /**
      * 解码base64字符串

@@ -1,6 +1,6 @@
 package com.dragon.shadowsocks.domain;
 
-import com.dragon.shadowsocks.common.utils.BizException;
+import com.dragon.shadowsocks.common.exception.BizException;
 import com.dragon.shadowsocks.common.utils.PatternUtil;
 import org.apache.commons.lang3.StringUtils;
 

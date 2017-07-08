@@ -1,6 +1,6 @@
 package com.dragon.shadowsocks.control;
 
-import com.dragon.shadowsocks.common.utils.BizException;
+import com.dragon.shadowsocks.common.exception.BizException;
 import com.dragon.shadowsocks.contract.ProfileList;
 import com.dragon.shadowsocks.contract.model.ProfileInfo;
 import com.dragon.shadowsocks.domain.Profile;

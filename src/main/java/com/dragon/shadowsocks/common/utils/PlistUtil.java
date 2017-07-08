@@ -32,7 +32,7 @@ public final class PlistUtil {
         }
 
         String data = matcher.group(1).trim();
-        String s = Utils.decodeBase64(data);
+        String s = CommonUtil.decodeBase64(data);
         try {
             return JSON.parseObject(s, DataModel.class);
         } catch (Exception ignore) {

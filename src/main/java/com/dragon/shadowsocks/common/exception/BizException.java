@@ -1,4 +1,4 @@
-package com.dragon.shadowsocks.common.utils;
+package com.dragon.shadowsocks.common.exception;
 
 /**
  * Created by cjw on 2017/6/18.

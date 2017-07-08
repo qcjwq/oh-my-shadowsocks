@@ -33,6 +33,15 @@ public interface PlistRepository {
     DataModel getProfileList(NSDictionary nsDictionary);
 
     /**
+     * 是否需要更新Shadowsocks的配置
+     *
+     * @param plistPath plist path
+     * @param dataModel data model
+     * @return boolean
+     */
+    boolean isNeedUpdateConfig(String plistPath, DataModel dataModel);
+
+    /**
      * 更新Shadowsocks中config配置
      *
      * @param plistPath plist path

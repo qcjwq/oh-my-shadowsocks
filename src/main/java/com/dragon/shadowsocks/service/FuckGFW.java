@@ -1,30 +1,41 @@
 package com.dragon.shadowsocks.service;
 
-import com.dragon.shadowsocks.repository.PlistRepository;
-import com.dragon.shadowsocks.repository.ShadowSocksRepository;
+import com.dragon.shadowsocks.model.config.SchedulConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.text.MessageFormat;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by cjw on 2017/6/24.
  */
 @Component
-public class FuckGFW {
+public class FuckGFW implements CommandLineRunner {
+    private static final Logger logger = LoggerFactory.getLogger(FuckGFW.class);
 
     @Autowired
-    private ShadowSocksRepository shadowSocksRepository;
+    private SchedulConfig schedulConfig;
 
     @Autowired
-    private PlistRepository plistRepository;
+    private ScheduledFactory scheduledFactory;
 
-    public void run() {
-        //1、获取种子账号密码
+    @Override
+    public void run(String... strings) throws Exception {
+        ScheduledExecutorService schedul = Executors.newScheduledThreadPool(10);
 
-        //2、操作Plist，写入文件
+        long initialDelay = schedulConfig.getInitialDelay();
+        long period = schedulConfig.getPeriod();
+        ScheduledExecutor command = scheduledFactory.createScheduledExecutor();
 
-        //3、重启应用
-
-        //4、验证
-
+        String message = MessageFormat.format("调度计划：initialDelay={0},period={1}", initialDelay, period);
+        logger.debug(message);
+        logger.info("任务调度开始...");
+        schedul.scheduleAtFixedRate(command, initialDelay, period, TimeUnit.SECONDS);
     }
 }
