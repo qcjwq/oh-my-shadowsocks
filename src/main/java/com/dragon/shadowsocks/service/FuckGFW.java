@@ -27,6 +27,10 @@ public class FuckGFW implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
+        if (true) {
+            //return;
+        }
+
         ScheduledExecutorService schedul = Executors.newScheduledThreadPool(10);
 
         long initialDelay = schedulConfig.getInitialDelay();

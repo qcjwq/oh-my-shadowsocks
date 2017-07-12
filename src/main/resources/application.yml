@@ -6,7 +6,7 @@ visitlog.enabled: true
 
 schedul:
   initialDelay: 3
-  period: 180
+  period: 60
 
 logging:
   level:
