@@ -84,15 +84,14 @@ public class ProfileModel {
         return !profileModel.equals(usingProfileModel);
     }
 
-    private static String getNSDcitValue(NSDictionary rootDict, ShadowsocksKeyEnum key) {
-        if (!rootDict.containsKey(key.getValue())) {
-            return "";
-        }
-
-        return rootDict.get(key.getValue()).toString();
-    }
-
-    private static void putOrReplace(NSDictionary rootDict, ShadowsocksKeyEnum key, NSObject value) {
+    /**
+     * 增加或更新指定的键值
+     *
+     * @param rootDict the root dict
+     * @param key      the key
+     * @param value    the value
+     */
+    public static void putOrReplace(NSDictionary rootDict, ShadowsocksKeyEnum key, NSObject value) {
         if (!rootDict.containsKey(key.getValue())) {
             rootDict.put(key.getValue(), value);
             return;

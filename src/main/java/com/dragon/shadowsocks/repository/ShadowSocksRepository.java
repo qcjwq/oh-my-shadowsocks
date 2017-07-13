@@ -12,9 +12,13 @@ public interface ShadowSocksRepository {
 
     boolean isRunning();
 
+    void shutdown();
+
     void kill();
 
-    void start();
+    void open();
+
+    void startup();
 
     void restart();
 }

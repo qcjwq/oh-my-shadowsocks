@@ -30,7 +30,7 @@ public class ScheduledExecutor implements Runnable {
     @Override
     public void run() {
         if (!shadowSocksRepository.isRunning()) {
-            shadowSocksRepository.start();
+            shadowSocksRepository.open();
         }
 
         List<ProfileInfo> profileInfoList = getProfileInfos();
