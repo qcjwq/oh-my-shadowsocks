@@ -18,6 +18,7 @@ public class UnirestRepositoryImpl implements UnirestRepository {
     @Override
     public String getString(String url) {
         try {
+            logger.debug("url:" + url);
             Unirest.setTimeouts(10000, 10000);
             return Unirest.get(url).asString().getBody();
         } catch (UnirestException e) {

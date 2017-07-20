@@ -2,19 +2,24 @@ package com.dragon.shadowsocks.repository.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.dd.plist.NSDictionary;
-import com.dd.plist.NSSet;
+import com.dd.plist.NSNumber;
+import com.dd.plist.NSObject;
 import com.dragon.shadowsocks.common.utils.CommonUtil;
 import com.dragon.shadowsocks.contract.ProfileList;
+import com.dragon.shadowsocks.model.config.SchedulConfig;
 import com.dragon.shadowsocks.model.macos.ProfileModel;
 import com.dragon.shadowsocks.model.macos.ShadowsocksKeyEnum;
 import com.dragon.shadowsocks.repository.PlistRepository;
 import com.dragon.shadowsocks.repository.ShadowSocksRepository;
 import com.dragon.shadowsocks.repository.UnirestRepository;
 import com.dragon.shadowsocks.repository.UnixScriptRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.text.MessageFormat;
 
 /**
  * Created by cjw on 2017/6/24.
@@ -22,6 +27,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ShadowSocksRepositoryImpl implements ShadowSocksRepository {
     private static final Logger logger = LoggerFactory.getLogger(ShadowSocksRepositoryImpl.class);
+    private static int Index = 0;
 
     @Autowired
     private UnirestRepository unirestRepository;
@@ -32,10 +38,23 @@ public class ShadowSocksRepositoryImpl implements ShadowSocksRepository {
     @Autowired
     private PlistRepository plistRepository;
 
+    @Autowired
+    private SchedulConfig schedulConfig;
+
     @Override
     public ProfileList.Response getProfileList() {
-        String result = unirestRepository.getString(CommonUtil.getProfileListUrl());
+        String result = unirestRepository.getString(getProfileListUrl());
         return JSON.parseObject(result, ProfileList.Response.class);
+    }
+
+    @Override
+    public int getIndex() {
+        return Index;
+    }
+
+    @Override
+    public void setIndex(int index) {
+        Index = index;
     }
 
     @Override
@@ -75,9 +94,9 @@ public class ShadowSocksRepositoryImpl implements ShadowSocksRepository {
 
     @Override
     public void restart() {
-        shutdown();
         kill();
         open();
+        shutdown();
         startup();
         logger.info("重启Shadowsocks成功");
     }
@@ -85,15 +104,25 @@ public class ShadowSocksRepositoryImpl implements ShadowSocksRepository {
     /**
      * 设置Shadowsocks是否启动运行
      *
-     * @param ordered the ordered
+     * @param running the isRunning
      */
-    private void setIsRunning(boolean ordered) {
+    private void setIsRunning(boolean running) {
         String plistPath = CommonUtil.getShadowSocksPlistPath();
         NSDictionary rootDict = plistRepository.getNSDictionary(plistPath);
-        NSSet isRunning = new NSSet(ordered);
+        NSObject isRunning = new NSNumber(running);
         ProfileModel.putOrReplace(rootDict, ShadowsocksKeyEnum.ShadowsocksIsRunning, isRunning);
-        plistRepository.saveAsXML(rootDict, plistPath);
+        plistRepository.saveAsBinary(rootDict, plistPath);
 
         importConfig();
+    }
+
+    private String getProfileListUrl() {
+        String host = "106.15.89.193:7777";
+        String profileHost = schedulConfig.getProfileHost();
+        if (StringUtils.isNotBlank(profileHost)) {
+            host = profileHost;
+        }
+
+        return MessageFormat.format("http://{0}/getProfileList", host);
     }
 }

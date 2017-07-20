@@ -69,7 +69,9 @@ public class ScheduledExecutor implements Runnable {
     private DataModel createDataModel(List<ProfileInfo> profileInfoList) {
         DataModel dataModel = new DataModel();
         //todo:根据算法选择哪个服务器
-        dataModel.setCurrent(5);
+        int index = shadowSocksRepository.getIndex();
+        logger.debug("当前索引：" + index);
+        dataModel.setCurrent(index);
         List<ProfileModel> profileModelList = DataModel.convert(profileInfoList);
         dataModel.setProfiles(profileModelList);
         return dataModel;

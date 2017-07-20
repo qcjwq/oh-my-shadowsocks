@@ -19,6 +19,8 @@ import java.util.List;
 @Component
 public class PlistRepositoryImpl implements PlistRepository {
 
+    private static NSDictionary UsingNSDictionary;
+
     /**
      * 获取Plist文件字典集合
      *
@@ -27,6 +29,10 @@ public class PlistRepositoryImpl implements PlistRepository {
      */
     @Override
     public NSDictionary getNSDictionary(String plistPath) {
+        if (UsingNSDictionary != null) {
+            return UsingNSDictionary;
+        }
+
         File file = new File(plistPath);
         if (!file.exists()) {
             return new NSDictionary();
@@ -99,7 +105,7 @@ public class PlistRepositoryImpl implements PlistRepository {
         ProfileModel.updateNSDictionary(rootDict, dataModel);
 
         //保存更新后的对象到文件
-        saveAsXML(rootDict, plistPath);
+        saveAsBinary(rootDict, plistPath);
     }
 
     /**

@@ -8,6 +8,10 @@ import com.dragon.shadowsocks.contract.ProfileList;
 public interface ShadowSocksRepository {
     ProfileList.Response getProfileList();
 
+    void setIndex(int index);
+
+    int getIndex();
+
     void importConfig();
 
     boolean isRunning();

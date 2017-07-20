@@ -12,7 +12,6 @@ import java.text.MessageFormat;
  * Created by cjw on 2017/6/25.
  */
 public class CommonUtil {
-
     private static final Logger logger = LoggerFactory.getLogger(CommonUtil.class);
 
     /**
@@ -56,10 +55,6 @@ public class CommonUtil {
         }
 
         return Integer.parseInt(s);
-    }
-
-    public static String getProfileListUrl() {
-        return "http://106.15.89.193:7777/getProfileList";
     }
 
     public static String getShadowSocksPlistPath() {

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 public class SchedulConfig {
     private int initialDelay;
     private int period;
+    private String profileHost;
 
     public int getInitialDelay() {
         return initialDelay;
@@ -27,5 +28,13 @@ public class SchedulConfig {
 
     public void setPeriod(int period) {
         this.period = period;
+    }
+
+    public String getProfileHost() {
+        return profileHost;
+    }
+
+    public void setProfileHost(String profileHost) {
+        this.profileHost = profileHost;
     }
 }

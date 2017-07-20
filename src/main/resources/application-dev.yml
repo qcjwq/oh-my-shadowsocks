@@ -4,7 +4,7 @@ spring:
       anabled: DETECT
 
 server:
-  port: 7777
+  port: 7779
   connection-timeout: 5000
 
 visitlog.enabled: true
@@ -12,7 +12,7 @@ visitlog.enabled: true
 schedul:
   initialDelay: 10
   period: 120
-  profileHost: 106.15.89.193:7777
+  profileHost: localhost:7779
 
 logging:
   level:
